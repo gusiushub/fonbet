@@ -101,12 +101,18 @@ function generateCsv($item, $i)
                 $event['Names'][0]['Value'],
                 $event['Score'],
                 $event['ResultCode'],
-                $event['UserWin1']['Percentage'],
-                $event['UserWin1']['Probability'],
-                $event['UserDraw']['Probability'],
-                $event['UserDraw']['Probability'],
-                $event['UserWin2']['Percentage'],
-                $event['UserWin2']['Probability']
+                number_format($event['UserWin1']['Percentage'], 2, ',', ' '),
+                number_format($event['UserWin1']['Probability'], 2, ',', ' '),
+                number_format($event['UserWin1']['Percentage'], 2, ',', ' '),
+                number_format($event['UserWin1']['Probability'], 2, ',', ' '),
+                number_format($event['UserWin2']['Probability'], 2, ',', ' '),
+                number_format($event['UserWin2']['Percentage'], 2, ',', ' ')
+//                $event['UserWin1']['Percentage'],
+//                $event['UserWin1']['Probability'],
+//                $event['UserDraw']['Probability'],
+//                $event['UserDraw']['Probability'],
+//                $event['UserWin2']['Percentage'],
+//                $event['UserWin2']['Probability']
             );
         }
     }
@@ -139,7 +145,6 @@ function getFirstItemId()
 function getFirstItem()
 {
     $ch = curl_init();
-
     curl_setopt($ch, CURLOPT_URL, 'https://clientsapi11.bkfon-resource.ru/superexpress-info/DataService.svc/SelectDrawings');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, "{\"sp\":{\"StartFrom\":0,\"Count\":20,\"SortField\":\"Expired\",\"SortDir\":\"DESC\",\"Culture\":\"ru-RU\",\"TimeZoneId\":\"\",\"TimeZoneOffset\":-180,\"State\":[2]}}");
@@ -212,7 +217,6 @@ function delStr($string, $file)
             $out[] = $line;
         }
     }
-
     $fp = fopen($file, "w+");
     flock($fp, LOCK_EX);
     foreach($out as $line) {

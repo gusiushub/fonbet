@@ -16,8 +16,6 @@ function run($from,$to,$file)
     setCsv($original,$file);
     print PHP_EOL;
     print "Файл обновлен!" . PHP_EOL;
-//    echo "\n\r";
-//    echo 'Файл обновлен';
     return true;
 }
 
@@ -89,7 +87,7 @@ function generateCsv($item, $i)
         $events = $item['Details']['Events'];
         foreach ($events as $event) {
             if (preg_match('#\((.*?)\)#', $event['Date'], $matches)) {
-                $EventDate = date('Y-m-d H:m', (int)substr($matches[1], 0, -3));
+                $EventDate = date('Y-m-d', (int)substr($matches[1], 0, -3));
             } else {
                 continue;
             }
@@ -103,10 +101,10 @@ function generateCsv($item, $i)
                 $event['ResultCode'],
                 number_format($event['UserWin1']['Percentage'], 2, ',', ' '),
                 number_format($event['UserWin1']['Probability'], 2, ',', ' '),
-                number_format($event['UserWin1']['Percentage'], 2, ',', ' '),
-                number_format($event['UserWin1']['Probability'], 2, ',', ' '),
-                number_format($event['UserWin2']['Probability'], 2, ',', ' '),
-                number_format($event['UserWin2']['Percentage'], 2, ',', ' ')
+                number_format($event['UserDraw']['Percentage'], 2, ',', ' '),
+                number_format($event['UserDraw']['Probability'], 2, ',', ' '),
+                number_format($event['UserWin2']['Percentage'], 2, ',', ' '),
+                number_format($event['UserWin2']['Probability'], 2, ',', ' ')
 //                $event['UserWin1']['Percentage'],
 //                $event['UserWin1']['Probability'],
 //                $event['UserDraw']['Probability'],
@@ -293,13 +291,11 @@ function getAllItems($count = 20)
 function getItem($id)
 {
     $ch = curl_init();
-
     curl_setopt($ch, CURLOPT_URL, 'https://clientsapi11.bkfon-resource.ru/superexpress-info/DataService.svc/GetDrawing');
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, "{\"id\":$id}");
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_ENCODING, 'gzip, deflate');
-
     $headers = array();
     $headers[] = 'Accept: application/json, text/plain, */*';
     $headers[] = 'Referer: https://www.fonbet.ru/superexpress-info/?locale=ru&pageDomain=https://www.fonbet.ru';
@@ -307,7 +303,6 @@ function getItem($id)
     $headers[] = 'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36';
     $headers[] = 'Content-Type: application/json';
     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
     $result = curl_exec($ch);
     if (curl_errno($ch)) {
         return false;
@@ -325,7 +320,6 @@ function getItem($id)
 function setCsv($list,$file)
 {
     $fp = fopen($file, 'w');
-
     foreach ($list as $fields) {
                 fputcsv($fp, $fields, ';');
     }

@@ -1,6 +1,5 @@
 <?php
 set_time_limit(0);
-//system("clear");
 //$start = microtime(true);
 
 require __DIR__.'/function.php';
@@ -27,15 +26,9 @@ switch ($argv[1]) {
         break;
 }
 echo "\n";
-
-
-
 //$finish = microtime(true);
-
 //$delta = $finish - $start;
-
 echo "\r\n";
-
 //echo $delta . ' сек.';
 
 return 0;
